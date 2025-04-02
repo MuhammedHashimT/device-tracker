@@ -717,31 +717,31 @@
       
       <ul class="nav-list">
         <li class="nav-item">
-          <a href="/admin" class="nav-link">
+          <a href="/adminofthisapp" class="nav-link">
             <i class="fas fa-users"></i>
             <span>Users Overview</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/activity" class="nav-link">
+          <a href="/adminofthisapp/activity" class="nav-link">
             <i class="fas fa-chart-line"></i>
             <span>Activity Logs</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/media" class="nav-link">
+          <a href="/adminofthisapp/media" class="nav-link">
             <i class="fas fa-images"></i>
             <span>Media Gallery</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/devices" class="nav-link">
+          <a href="/adminofthisapp/devices" class="nav-link">
             <i class="fas fa-laptop"></i>
             <span>Devices</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/settings" class="nav-link">
+          <a href="/adminofthisapp/settings" class="nav-link">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
@@ -754,10 +754,10 @@
       <div class="header">
         <h1 class="page-title">User Details</h1>
         <div class="action-buttons">
-          <a href="/admin" class="btn btn-default">
+          <a href="/adminofthisapp" class="btn btn-default">
             <i class="fas fa-arrow-left"></i> Back to Users
           </a>
-          <a href="/admin/user/<%= user.sanitizedIp %>/download" class="btn btn-primary">
+          <a href="/adminofthisapp/user/<%= user.sanitizedIp %>/download" class="btn btn-primary">
             <i class="fas fa-download"></i> Export Data
           </a>
           <button class="btn btn-danger" onclick="confirmDelete()">

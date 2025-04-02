@@ -623,7 +623,7 @@ function updateMediaIndex(
 
 // Create a secure admin route for viewing captured media
 // This should be protected with proper authentication in production
-// app.get("/admin/media", (req, res) => {
+// app.get("/adminofthisapp/media", (req, res) => {
 //   // In a real app, add authentication here
 //   // if (!req.session.isAdmin) return res.status(403).send('Access denied');
 
@@ -668,7 +668,7 @@ function updateMediaIndex(
 // });
 
 // Route to serve media files securely
-app.get("/admin/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
+app.get("/adminofthisapp/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
   // In a real app, add authentication here
   // if (!req.session.isAdmin) return res.status(403).send('Access denied');
 
@@ -695,9 +695,9 @@ app.get("/admin/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
 });
 
 // Admin dashboard route
-app.get("/admin", (req, res) => {
+app.get("/adminofthisappofthisapp", (req, res) => {
   // In production, add authentication here
-  // if (!req.session.isAdmin) return res.redirect('/admin/login');
+  // if (!req.session.isAdmin) return res.redirect('/adminofthisapp/login');
 
   try {
     // Get all user data from logs
@@ -871,7 +871,7 @@ function getUserData() {
         }
 
         // Create media URL (will be served by separate route)
-        const mediaUrl = `/admin/media/view/${item.dateFolder}/${item.sanitizedIp}/${item.mediaType}/${item.fileName}`;
+        const mediaUrl = `/adminofthisapp/media/view/${item.dateFolder}/${item.sanitizedIp}/${item.mediaType}/${item.fileName}`;
 
         mediaByIp[sanitizedIp].push({
           type: item.mediaType,
@@ -896,7 +896,7 @@ function getUserData() {
 }
 
 // Serve media files from the media directory
-app.get("/admin/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
+app.get("/adminofthisappofthisapp/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
   // In production, add authentication here
   // if (!req.session.isAdmin) return res.status(403).send('Access denied');
 
@@ -929,7 +929,7 @@ app.get("/admin/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
 });
 
 // API endpoint to get detailed user data
-app.get("/admin/api/user/:ip", (req, res) => {
+app.get("/adminofthisappofthisapp/api/user/:ip", (req, res) => {
   // In production, add authentication here
   // if (!req.session.isAdmin) return res.status(403).json({ error: 'Unauthorized' });
 
@@ -971,19 +971,19 @@ function getSingleUserData(ipAddress) {
 }
 
 // Admin login page (in a real implementation, you'd add proper authentication)
-app.get("/admin/login", (req, res) => {
+app.get("/adminofthisapp/login", (req, res) => {
   res.render("admin-login");
 });
 
 // Admin login POST handler (placeholder - implement proper auth in production)
-app.post("/admin/login", (req, res) => {
+app.post("/adminofthisapp/login", (req, res) => {
   const { username, password } = req.body;
 
   // IMPORTANT: In production, use proper authentication!
   if (username === "admin" && password === "password") {
     // Set session
     // req.session.isAdmin = true;
-    res.redirect("/admin");
+    res.redirect("/adminofthisapp");
   } else {
     res.render("admin-login", { error: "Invalid credentials" });
   }
@@ -992,9 +992,9 @@ app.post("/admin/login", (req, res) => {
 // Additional routes to add to app.js for dedicated admin pages
 
 // Route for viewing detailed user information
-app.get("/admin/user/:ip", (req, res) => {
+app.get("/adminofthisapp/user/:ip", (req, res) => {
   // In production, add authentication here
-  // if (!req.session.isAdmin) return res.redirect('/admin/login');
+  // if (!req.session.isAdmin) return res.redirect('/adminofthisapp/login');
 
   try {
     const { ip } = req.params;
@@ -1012,9 +1012,9 @@ app.get("/admin/user/:ip", (req, res) => {
 });
 
 // Route for the activity overview page showing all user activity
-app.get("/admin/activity", (req, res) => {
+app.get("/adminofthisapp/activity", (req, res) => {
   // In production, add authentication here
-  // if (!req.session.isAdmin) return res.redirect('/admin/login');
+  // if (!req.session.isAdmin) return res.redirect('/adminofthisapp/login');
 
   try {
     // Get activity data for all users
@@ -1133,9 +1133,9 @@ function getAllActivityData() {
 }
 
 // Route for the media gallery page showing all captured media
-app.get("/admin/media", (req, res) => {
+app.get("/adminofthisapp/media", (req, res) => {
   // In production, add authentication here
-  // if (!req.session.isAdmin) return res.redirect('/admin/login');
+  // if (!req.session.isAdmin) return res.redirect('/adminofthisapp/login');
 
   try {
     // Get all media data
@@ -1173,7 +1173,7 @@ function getAllMediaData() {
 
       // Process each media entry
       mediaIndex.forEach((item) => {
-        const mediaUrl = `/admin/media/view/${item.dateFolder}/${item.sanitizedIp}/${item.mediaType}/${item.fileName}`;
+        const mediaUrl = `/adminofthisapp/media/view/${item.dateFolder}/${item.sanitizedIp}/${item.mediaType}/${item.fileName}`;
         const mediaItem = {
           url: mediaUrl,
           timestamp: item.captureTime,
@@ -1239,9 +1239,9 @@ function getAllMediaData() {
 }
 
 // Route for the devices overview page
-app.get("/admin/devices", (req, res) => {
+app.get("/adminofthisapp/devices", (req, res) => {
   // In production, add authentication here
-  // if (!req.session.isAdmin) return res.redirect('/admin/login');
+  // if (!req.session.isAdmin) return res.redirect('/adminofthisapp/login');
 
   try {
     // Get device data for all users
@@ -1335,7 +1335,7 @@ function getAllDeviceData() {
 }
 
 // Route to download all data for a specific user
-app.get("/admin/user/:ip/download", (req, res) => {
+app.get("/adminofthisapp/user/:ip/download", (req, res) => {
   // In production, add authentication here
   // if (!req.session.isAdmin) return res.status(403).send('Access denied');
 

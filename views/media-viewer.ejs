@@ -47,10 +47,10 @@
             <% mediaData[ip].mediaItems.forEach(item => { %>
               <div class="media-item">
                 <% if (item.mediaType === 'image') { %>
-                  <img src="/admin/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/image/<%= item.fileName %>" alt="Captured image">
+                  <img src="/adminofthisapp/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/image/<%= item.fileName %>" alt="Captured image">
                 <% } else if (item.mediaType === 'video') { %>
                   <video controls>
-                    <source src="/admin/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/video/<%= item.fileName %>" type="video/mp4">
+                    <source src="/adminofthisapp/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/video/<%= item.fileName %>" type="video/mp4">
                     Your browser does not support video playback.
                   </video>
                 <% } %>

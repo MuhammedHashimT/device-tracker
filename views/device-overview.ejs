@@ -382,31 +382,31 @@
       
       <ul class="nav-list">
         <li class="nav-item">
-          <a href="/admin" class="nav-link">
+          <a href="/adminofthisapp" class="nav-link">
             <i class="fas fa-users"></i>
             <span>Users Overview</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/activity" class="nav-link">
+          <a href="/adminofthisapp/activity" class="nav-link">
             <i class="fas fa-chart-line"></i>
             <span>Activity Logs</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/media" class="nav-link">
+          <a href="/adminofthisapp/media" class="nav-link">
             <i class="fas fa-images"></i>
             <span>Media Gallery</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/devices" class="nav-link active">
+          <a href="/adminofthisapp/devices" class="nav-link active">
             <i class="fas fa-laptop"></i>
             <span>Devices</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/settings" class="nav-link">
+          <a href="/adminofthisapp/settings" class="nav-link">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
@@ -565,7 +565,7 @@
               <% if (deviceData.hardwareInfo && deviceData.hardwareInfo.length > 0) { %>
                 <% deviceData.hardwareInfo.forEach(device => { %>
                   <tr>
-                    <td><a href="/admin/user/<%= device.sanitizedIp %>"><%= device.ip %></a></td>
+                    <td><a href="/adminofthisapp/user/<%= device.sanitizedIp %>"><%= device.ip %></a></td>
                     <td><%= device.browser %></td>
                     <td><%= device.os %></td>
                     <td title="<%= device.gpu %>"><%= device.gpu.length > 20 ? device.gpu.substring(0, 20) + '...' : device.gpu %></td>
@@ -573,7 +573,7 @@
                     <td><%= device.cores %></td>
                     <td><%= device.screenSize %></td>
                     <td>
-                      <a href="/admin/user/<%= device.sanitizedIp %>" class="view-link">View Details</a>
+                      <a href="/adminofthisapp/user/<%= device.sanitizedIp %>" class="view-link">View Details</a>
                     </td>
                   </tr>
                 <% }); %>
