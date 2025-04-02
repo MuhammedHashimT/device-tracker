@@ -695,7 +695,7 @@ app.get("/adminofthisapp/media/view/:dateFolder/:ip/:type/:filename", (req, res)
 });
 
 // Admin dashboard route
-app.get("/adminofthisappofthisapp", (req, res) => {
+app.get("/adminofthisapp", (req, res) => {
   // In production, add authentication here
   // if (!req.session.isAdmin) return res.redirect('/adminofthisapp/login');
 
@@ -896,7 +896,7 @@ function getUserData() {
 }
 
 // Serve media files from the media directory
-app.get("/adminofthisappofthisapp/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
+app.get("/adminofthisapp/media/view/:dateFolder/:ip/:type/:filename", (req, res) => {
   // In production, add authentication here
   // if (!req.session.isAdmin) return res.status(403).send('Access denied');
 
@@ -929,7 +929,7 @@ app.get("/adminofthisappofthisapp/media/view/:dateFolder/:ip/:type/:filename", (
 });
 
 // API endpoint to get detailed user data
-app.get("/adminofthisappofthisapp/api/user/:ip", (req, res) => {
+app.get("/adminofthisapp/api/user/:ip", (req, res) => {
   // In production, add authentication here
   // if (!req.session.isAdmin) return res.status(403).json({ error: 'Unauthorized' });
 
