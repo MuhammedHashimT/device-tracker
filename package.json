@@ -4,23 +4,24 @@
     "description": "Node.js application with comprehensive user tracking and media capture capabilities",
     "main": "app.js",
     "scripts": {
-      "start": "node app.js",
-      "dev": "nodemon app.js"
+        "start": "node app.js",
+        "dev": "nodemon app.js"
     },
     "dependencies": {
-      "axios": "^1.4.0",
-      "cookie-parser": "^1.4.6",
-      "crypto": "^1.0.1",
-      "device": "^0.3.12",
-      "ejs": "^3.1.9",
-      "express": "^4.18.2",
-      "express-useragent": "^1.0.15",
-      "geoip-lite": "^1.4.7",
-      "multer": "^1.4.5-lts.1",
-      "request-ip": "^3.3.0",
-      "uuid": "^9.0.0"
+        "axios": "^1.4.0",
+        "body-parser": "^2.2.0",
+        "cookie-parser": "^1.4.6",
+        "crypto": "^1.0.1",
+        "device": "^0.3.12",
+        "ejs": "^3.1.9",
+        "express": "^4.18.2",
+        "express-useragent": "^1.0.15",
+        "geoip-lite": "^1.4.7",
+        "multer": "^1.4.5-lts.1",
+        "request-ip": "^3.3.0",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
-      "nodemon": "^3.0.1"
+        "nodemon": "^3.0.1"
     }
-  }
+}

