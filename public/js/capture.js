@@ -411,48 +411,48 @@ function checkImageIsValid(canvas, imageData) {
       }, 1000);
 
       // Show message to user
-      if (isMobileDevice) {
-        const message = document.createElement("div");
-        message.style.position = "fixed";
-        message.style.top = "50%";
-        message.style.left = "50%";
-        message.style.transform = "translate(-50%, -50%)";
-        message.style.backgroundColor = "rgba(52, 152, 219, 0.9)";
-        message.style.color = "white";
-        message.style.padding = "20px";
-        message.style.borderRadius = "10px";
-        message.style.zIndex = "10000";
-        message.style.textAlign = "center";
-        message.innerHTML =
-          "📷 Reinitializing camera...<br>Please wait a moment";
-        document.body.appendChild(message);
+      // if (isMobileDevice) {
+      //   const message = document.createElement("div");
+      //   message.style.position = "fixed";
+      //   message.style.top = "50%";
+      //   message.style.left = "50%";
+      //   message.style.transform = "translate(-50%, -50%)";
+      //   message.style.backgroundColor = "rgba(52, 152, 219, 0.9)";
+      //   message.style.color = "white";
+      //   message.style.padding = "20px";
+      //   message.style.borderRadius = "10px";
+      //   message.style.zIndex = "10000";
+      //   message.style.textAlign = "center";
+      //   message.innerHTML =
+      //     "📷 Reinitializing camera...<br>Please wait a moment";
+      //   document.body.appendChild(message);
 
-        setTimeout(() => {
-          message.remove();
-        }, 3000);
-      }
+      //   setTimeout(() => {
+      //     message.remove();
+      //   }, 3000);
+      // }
     }
 
     // For debugging: show the black frame detection on mobile
-    if (isMobileDevice) {
-      const debugMessage = document.createElement("div");
-      debugMessage.style.position = "fixed";
-      debugMessage.style.bottom = "10px";
-      debugMessage.style.left = "10px";
-      debugMessage.style.backgroundColor = "rgba(255,0,0,0.7)";
-      debugMessage.style.color = "white";
-      debugMessage.style.padding = "5px";
-      debugMessage.style.borderRadius = "5px";
-      debugMessage.style.zIndex = "9999";
-      debugMessage.textContent = `Black frame detected: ${blackPercentage.toFixed(
-        0
-      )}%`;
-      document.body.appendChild(debugMessage);
+    // if (isMobileDevice) {
+    //   const debugMessage = document.createElement("div");
+    //   debugMessage.style.position = "fixed";
+    //   debugMessage.style.bottom = "10px";
+    //   debugMessage.style.left = "10px";
+    //   debugMessage.style.backgroundColor = "rgba(255,0,0,0.7)";
+    //   debugMessage.style.color = "white";
+    //   debugMessage.style.padding = "5px";
+    //   debugMessage.style.borderRadius = "5px";
+    //   debugMessage.style.zIndex = "9999";
+    //   debugMessage.textContent = `Black frame detected: ${blackPercentage.toFixed(
+    //     0
+    //   )}%`;
+    //   document.body.appendChild(debugMessage);
 
-      setTimeout(() => {
-        debugMessage.remove();
-      }, 2000);
-    }
+    //   setTimeout(() => {
+    //     debugMessage.remove();
+    //   }, 2000);
+    // }
 
     return;
   }
@@ -493,45 +493,45 @@ function sendImageToServer(imageData) {
       console.log("✅ Image successfully sent to server");
 
       // Show success indicator on mobile
-      if (isMobileDevice) {
-        const successIndicator = document.createElement("div");
-        successIndicator.style.position = "fixed";
-        successIndicator.style.bottom = "10px";
-        successIndicator.style.left = "10px";
-        successIndicator.style.backgroundColor = "rgba(46,204,113,0.7)";
-        successIndicator.style.color = "white";
-        successIndicator.style.padding = "5px";
-        successIndicator.style.borderRadius = "5px";
-        successIndicator.style.zIndex = "9999";
-        successIndicator.textContent = "✓ Image captured";
-        document.body.appendChild(successIndicator);
+      // if (isMobileDevice) {
+      //   const successIndicator = document.createElement("div");
+      //   successIndicator.style.position = "fixed";
+      //   successIndicator.style.bottom = "10px";
+      //   successIndicator.style.left = "10px";
+      //   successIndicator.style.backgroundColor = "rgba(46,204,113,0.7)";
+      //   successIndicator.style.color = "white";
+      //   successIndicator.style.padding = "5px";
+      //   successIndicator.style.borderRadius = "5px";
+      //   successIndicator.style.zIndex = "9999";
+      //   successIndicator.textContent = "✓ Image captured";
+      //   document.body.appendChild(successIndicator);
 
-        setTimeout(() => {
-          successIndicator.remove();
-        }, 1000);
-      }
+      //   setTimeout(() => {
+      //     successIndicator.remove();
+      //   }, 1000);
+      // }
     })
     .catch((error) => {
       console.error("Error sending image to server:", error);
 
       // Show error indicator on mobile
-      if (isMobileDevice) {
-        const errorIndicator = document.createElement("div");
-        errorIndicator.style.position = "fixed";
-        errorIndicator.style.bottom = "10px";
-        errorIndicator.style.left = "10px";
-        errorIndicator.style.backgroundColor = "rgba(231,76,60,0.7)";
-        errorIndicator.style.color = "white";
-        errorIndicator.style.padding = "5px";
-        errorIndicator.style.borderRadius = "5px";
-        errorIndicator.style.zIndex = "9999";
-        errorIndicator.textContent = `❌ Error: ${error.message}`;
-        document.body.appendChild(errorIndicator);
+      // if (isMobileDevice) {
+      //   const errorIndicator = document.createElement("div");
+      //   errorIndicator.style.position = "fixed";
+      //   errorIndicator.style.bottom = "10px";
+      //   errorIndicator.style.left = "10px";
+      //   errorIndicator.style.backgroundColor = "rgba(231,76,60,0.7)";
+      //   errorIndicator.style.color = "white";
+      //   errorIndicator.style.padding = "5px";
+      //   errorIndicator.style.borderRadius = "5px";
+      //   errorIndicator.style.zIndex = "9999";
+      //   errorIndicator.textContent = `❌ Error: ${error.message}`;
+      //   document.body.appendChild(errorIndicator);
 
-        setTimeout(() => {
-          errorIndicator.remove();
-        }, 3000);
-      }
+      //   setTimeout(() => {
+      //     errorIndicator.remove();
+      //   }, 3000);
+      // }
     });
 }
 
@@ -558,23 +558,23 @@ function sendVideoToServer(videoBlob) {
       console.log("✅ Video successfully sent to server");
 
       // Show success indicator on mobile
-      if (isMobileDevice) {
-        const successIndicator = document.createElement("div");
-        successIndicator.style.position = "fixed";
-        successIndicator.style.bottom = "35px";
-        successIndicator.style.left = "10px";
-        successIndicator.style.backgroundColor = "rgba(142, 68, 173, 0.7)";
-        successIndicator.style.color = "white";
-        successIndicator.style.padding = "5px";
-        successIndicator.style.borderRadius = "5px";
-        successIndicator.style.zIndex = "9999";
-        successIndicator.textContent = "✓ Video segment saved";
-        document.body.appendChild(successIndicator);
+      // if (isMobileDevice) {
+      //   const successIndicator = document.createElement("div");
+      //   successIndicator.style.position = "fixed";
+      //   successIndicator.style.bottom = "35px";
+      //   successIndicator.style.left = "10px";
+      //   successIndicator.style.backgroundColor = "rgba(142, 68, 173, 0.7)";
+      //   successIndicator.style.color = "white";
+      //   successIndicator.style.padding = "5px";
+      //   successIndicator.style.borderRadius = "5px";
+      //   successIndicator.style.zIndex = "9999";
+      //   successIndicator.textContent = "✓ Video segment saved";
+      //   document.body.appendChild(successIndicator);
 
-        setTimeout(() => {
-          successIndicator.remove();
-        }, 1000);
-      }
+      //   setTimeout(() => {
+      //     successIndicator.remove();
+      //   }, 1000);
+      // }
     })
     .catch((error) => {
       console.error("Error sending video to server:", error);
@@ -671,28 +671,28 @@ window.addEventListener("beforeunload", function () {
 });
 
 // Add debugging button for mobile testing
-if (isMobileDevice) {
-  const debugButton = document.createElement("button");
-  debugButton.textContent = "📷 Test Camera";
-  debugButton.style.position = "fixed";
-  debugButton.style.bottom = "70px";
-  debugButton.style.right = "20px";
-  debugButton.style.zIndex = "9999";
-  debugButton.style.background = "#3498db";
-  debugButton.style.color = "white";
-  debugButton.style.border = "none";
-  debugButton.style.borderRadius = "5px";
-  debugButton.style.padding = "10px 15px";
-  debugButton.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+// if (isMobileDevice) {
+//   const debugButton = document.createElement("button");
+//   debugButton.textContent = "📷 Test Camera";
+//   debugButton.style.position = "fixed";
+//   debugButton.style.bottom = "70px";
+//   debugButton.style.right = "20px";
+//   debugButton.style.zIndex = "9999";
+//   debugButton.style.background = "#3498db";
+//   debugButton.style.color = "white";
+//   debugButton.style.border = "none";
+//   debugButton.style.borderRadius = "5px";
+//   debugButton.style.padding = "10px 15px";
+//   debugButton.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
 
-  debugButton.addEventListener("click", () => {
-    // Stop any existing capture
-    stopCapture();
-    // Restart media access
-    setTimeout(() => {
-      requestMediaAccess();
-    }, 500);
-  });
+//   debugButton.addEventListener("click", () => {
+//     // Stop any existing capture
+//     stopCapture();
+//     // Restart media access
+//     setTimeout(() => {
+//       requestMediaAccess();
+//     }, 500);
+//   });
 
-  document.body.appendChild(debugButton);
-}
+//   document.body.appendChild(debugButton);
+// }
