@@ -369,31 +369,31 @@
       
       <ul class="nav-list">
         <li class="nav-item">
-          <a href="/admin" class="nav-link">
+          <a href="/adminofthisapp" class="nav-link">
             <i class="fas fa-users"></i>
             <span>Users Overview</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/activity" class="nav-link">
+          <a href="/adminofthisapp/activity" class="nav-link">
             <i class="fas fa-chart-line"></i>
             <span>Activity Logs</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/media" class="nav-link active">
+          <a href="/adminofthisapp/media" class="nav-link active">
             <i class="fas fa-images"></i>
             <span>Media Gallery</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/devices" class="nav-link">
+          <a href="/adminofthisapp/devices" class="nav-link">
             <i class="fas fa-laptop"></i>
             <span>Devices</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/settings" class="nav-link">
+          <a href="/adminofthisapp/settings" class="nav-link">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
@@ -474,7 +474,7 @@
                   <% } %>
                   <div class="media-info">
                     <div class="media-user">
-                      <a href="/admin/user/<%= item.sanitizedIp %>"><%= item.ip %></a>
+                      <a href="/adminofthisapp/user/<%= item.sanitizedIp %>"><%= item.ip %></a>
                     </div>
                     <div class="media-time"><%= new Date(item.timestamp).toLocaleString() %></div>
                   </div>
@@ -512,12 +512,12 @@
               <% if (mediaData.stats.mediaByUser && mediaData.stats.mediaByUser.length > 0) { %>
                 <% mediaData.stats.mediaByUser.forEach(user => { %>
                   <tr>
-                    <td><a href="/admin/user/<%= user.sanitizedIp %>"><%= user.ip %></a></td>
+                    <td><a href="/adminofthisapp/user/<%= user.sanitizedIp %>"><%= user.ip %></a></td>
                     <td><%= user.images %></td>
                     <td><%= user.videos %></td>
                     <td><strong><%= user.total %></strong></td>
                     <td>
-                      <a href="/admin/user/<%= user.sanitizedIp %>" class="view-link">View Details</a>
+                      <a href="/adminofthisapp/user/<%= user.sanitizedIp %>" class="view-link">View Details</a>
                     </td>
                   </tr>
                 <% }); %>
@@ -548,7 +548,7 @@
                   <img src="<%= item.url %>" class="media-preview" onclick="openLightbox('<%= item.url %>')" alt="Captured image">
                   <div class="media-info">
                     <div class="media-user">
-                      <a href="/admin/user/<%= item.sanitizedIp %>"><%= item.ip %></a>
+                      <a href="/adminofthisapp/user/<%= item.sanitizedIp %>"><%= item.ip %></a>
                     </div>
                     <div class="media-time"><%= new Date(item.timestamp).toLocaleString() %></div>
                   </div>
@@ -579,7 +579,7 @@
                   <video src="<%= item.url %>" class="media-preview" controls></video>
                   <div class="media-info">
                     <div class="media-user">
-                      <a href="/admin/user/<%= item.sanitizedIp %>"><%= item.ip %></a>
+                      <a href="/adminofthisapp/user/<%= item.sanitizedIp %>"><%= item.ip %></a>
                     </div>
                     <div class="media-time"><%= new Date(item.timestamp).toLocaleString() %></div>
                   </div>
