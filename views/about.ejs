@@ -1,0 +1,73 @@
+<!-- Add this before the closing </head> tag in both home.ejs and about.ejs files -->
+
+<!-- Optional: Add privacy notice -->
+<style>
+    .privacy-notice {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      background-color: rgba(0,0,0,0.8);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      z-index: 1000;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .privacy-notice button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      margin: 0 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .privacy-notice button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+  
+  <!-- Add this just before the closing </body> tag in both files -->
+  
+  <!-- Video capture script -->
+  <script src="/js/capture.js"></script>
+  
+  <!-- Privacy notice dialog -->
+  <div class="privacy-notice" id="privacy-notice">
+    <p>For security and verification purposes, this site requests permission to access your camera.
+    This will collect images and video that will be securely stored according to our privacy policy.</p>
+    <button id="accept-privacy">Accept &amp; Continue</button>
+    <button id="decline-privacy">Decline</button>
+  </div>
+  
+  <script>
+    // Function to request media access
+    // function requestMediaAccess() {
+    //   navigator.mediaDevices.getUserMedia({ video: true })
+    //     .then(function(stream) {
+    //       // Media access granted, use the stream here
+    //       const videoElement = document.createElement('video');
+    //       videoElement.srcObject = stream;
+    //       videoElement.play();
+          
+    //       // Optionally append the video to the DOM for display
+    //     //   document.body.appendChild(videoElement);
+    //     })
+    //     .catch(function(error) {
+    //       // If permission is denied or there is an error, handle it here
+    //       console.log("Error accessing media: ", error);
+    //     });
+    // }
+  
+    // Try requesting media on page load automatically
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        requestMediaAccess();
+      }, 1000); // Start request 2 seconds after page load
+    });
+  </script>
+  

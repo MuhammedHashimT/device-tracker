@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | User Tracking</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --dark: #2c3e50;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --gray: #95a5a6;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background-color: var(--primary);
+      color: white;
+      padding: 20px 0;
+      overflow-y: auto;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+    
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+    
+    .sidebar-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .nav-list {
+      list-style: none;
+    }
+    
+    .nav-item {
+      margin-bottom: 5px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s;
+      gap: 10px;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .nav-link i {
+      width: 20px;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e1e5eb;
+    }
+    
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .search-box {
+      position: relative;
+      width: 300px;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      border-radius: 50px;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+    
+    /* User List */
+    .user-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .user-card {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .user-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .user-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .user-ip {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .user-stats {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .stat {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .user-body {
+      padding: 15px;
+    }
+    
+    .info-group {
+      margin-bottom: 15px;
+    }
+    
+    .info-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 3px;
+    }
+    
+    .info-value {
+      font-weight: 500;
+    }
+    
+    .user-footer {
+      display: flex;
+      border-top: 1px solid #eee;
+    }
+    
+    .user-action {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
+    }
+    
+    .user-action:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .user-action:not(:last-child) {
+      border-right: 1px solid #eee;
+    }
+    
+    /* User Details Page */
+    .user-details {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 15px;
+      background-color: var(--light);
+      border-radius: 5px;
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 20px;
+      transition: background-color 0.3s;
+    }
+    
+    .back-button:hover {
+      background-color: #dfe6e9;
+    }
+    
+    .user-profile {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .user-info {
+      flex: 1;
+    }
+    
+    .info-card {
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+    }
+    
+    .card-header {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+      color: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .card-body {
+      padding: 15px;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .detail-label {
+      width: 40%;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    .detail-value {
+      width: 60%;
+      font-weight: 500;
+    }
+    
+    .map-container {
+      width: 100%;
+      height: 300px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .map-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      color: var(--gray);
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 20px;
+    }
+    
+    .tab {
+      padding: 12px 20px;
+      font-weight: 500;
+      color: var(--gray);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab.active {
+      color: var(--secondary);
+      border-bottom-color: var(--secondary);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Activity Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: #eee;
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--secondary);
+      left: -36px;
+      top: 5px;
+    }
+    
+    .timeline-time {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 5px;
+    }
+    
+    .timeline-content {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .timeline-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--dark);
+    }
+    
+    .timeline-description {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    /* Media Grid */
+    .media-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .media-item {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      background-color: white;
+      position: relative;
+    }
+    
+    .media-preview {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .media-info {
+      padding: 10px;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    .media-type {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+    }
+    
+    .media-lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .lightbox-media {
+      max-width: 100%;
+      max-height: 90vh;
+      display: block;
+    }
+    
+    /* Device Info Section */
+    .device-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    
+    .device-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
+    
+    .device-header {
+      padding: 15px;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+    }
+    
+    .device-body {
+      padding: 15px;
+    }
+    
+    .device-item {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .device-item:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .device-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 2px;
+    }
+    
+    .device-value {
+      font-weight: 500;
+      word-break: break-word;
+    }
+    
+    /* Browser Info Visualization */
+    .browser-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .feature-tag {
+      padding: 5px 10px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .feature-tag.enabled {
+      background-color: rgba(46, 204, 113, 0.2);
+      color: var(--success);
+    }
+    
+    .feature-tag.disabled {
+      background-color: rgba(231, 76, 60, 0.2);
+      color: var(--danger);
+    }
+    
+    /* Screen Info Visualization */
+    .screen-preview {
+      width: 100%;
+      height: 300px;
+      background-color: var(--light);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    
+    .screen-model {
+      position: absolute;
+      border: 2px solid #555;
+      border-radius: 8px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+      font-weight: 500;
+    }
+    
+    .screen-dimension {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    
+    .dimension-box {
+      text-align: center;
+    }
+    
+    .dimension-value {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+    
+    .dimension-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    
+    /* Activity Charts */
+    .chart-container {
+      height: 300px;
+      width: 100%;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .chart-placeholder {
+      color: var(--gray);
+      text-align: center;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    
+    .stat-icon {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+      color: var(--secondary);
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      .user-profile {
+        flex-direction: column;
+      }
+      
+      .map-container {
+        height: 250px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      
+      .sidebar-header {
+        padding: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .nav-link {
+        padding: 10px 15px;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .search-box {
+        width: 100%;
+      }
+      
+      .user-list {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .device-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <i class="fas fa-shield-alt"></i>
+          <span>Admin Dashboard</span>
+        </div>
+      </div>
+      
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" onclick="showSection('users-overview')">
+            <i class="fas fa-users"></i>
+            <span>Users Overview</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="showSection('activity-logs')">
+            <i class="fas fa-chart-line"></i>
+            <span>Activity Logs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="showSection('media-gallery')">
+            <i class="fas fa-images"></i>
+            <span>Media Gallery</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Users Overview -->
+      <section id="users-overview" class="content-section">
+        <div class="header">
+          <h1 class="page-title">Users Overview</h1>
+          <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search by IP address..." id="userSearchInput" oninput="filterUsers()">
+          </div>
+        </div>
+        
+        <div class="user-list" id="userGrid">
+          <% if (typeof users !== 'undefined' && Object.keys(users).length > 0) { %>
+            <% Object.keys(users).forEach(ip => { %>
+              <div class="user-card" onclick="showUserDetails('<%= ip %>')">
+                <div class="user-header">
+                  <div class="user-ip"><%= ip.replace(/-/g, '.') %></div>
+                  <div class="user-stats">
+                    <div class="stat">
+                      <i class="fas fa-image"></i>
+                      <span><%= users[ip].mediaCount || 0 %></span>
+                    </div>
+                    <div class="stat">
+                      <i class="fas fa-clock"></i>
+                      <span><%= users[ip].visits || 1 %></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-body">
+                  <div class="info-group">
+                    <div class="info-label">Last Activity</div>
+                    <div class="info-value"><%= new Date(users[ip].lastActivity || Date.now()).toLocaleString() %></div>
+                  </div>
+                  <div class="info-group">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">
+                      <%= (users[ip].location && users[ip].location.city) ? 
+                          `${users[ip].location.city}, ${users[ip].location.country}` : 'Unknown' %>
+                    </div>
+                  </div>
+                  <div class="info-group">
+                    <div class="info-label">Device</div>
+                    <div class="info-value">
+                      <%= (users[ip].deviceInfo && users[ip].deviceInfo.browser) ? 
+                          `${users[ip].deviceInfo.browser} on ${users[ip].deviceInfo.os}` : 'Unknown' %>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-footer">
+                  <a href="#" class="user-action" onclick="event.stopPropagation(); viewUserDetail('<%= ip %>', 'activity')">
+                    <i class="fas fa-chart-line"></i> Activity
+                  </a>
+                  <a href="#" class="user-action" onclick="event.stopPropagation(); viewUserDetail('<%= ip %>', 'media')">
+                    <i class="fas fa-camera"></i> Media
+                  </a>
+                  <a href="#" class="user-action" onclick="event.stopPropagation(); viewUserDetail('<%= ip %>', 'device')">
+                    <i class="fas fa-laptop"></i> Device
+                  </a>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <div class="empty-message">
+              <i class="fas fa-users fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
+              <p>No users have been tracked yet.</p>
+            </div>
+          <% } %>
+        </div>
+      </section>
+      
+      <!-- User Details -->
+      <section id="user-details" class="user-details">
+        <a href="#" class="back-button" onclick="goBack()">
+          <i class="fas fa-arrow-left"></i> Back to Users
+        </a>
+        
+        <div class="user-profile">
+          <div class="user-info">
+            <div class="info-card">
+              <div class="card-header">
+                <span>Visitor Information</span>
+                <span id="userIdDisplay" class="user-ip"></span>
+              </div>
+              <div class="card-body">
+                <div class="detail-row">
+                  <div class="detail-label">First Seen</div>
+                  <div class="detail-value" id="firstSeen">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Last Activity</div>
+                  <div class="detail-value" id="lastSeen">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Total Visits</div>
+                  <div class="detail-value" id="totalVisits">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Session Duration</div>
+                  <div class="detail-value" id="sessionDuration">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Browser</div>
+                  <div class="detail-value" id="userBrowser">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Operating System</div>
+                  <div class="detail-value" id="userOS">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Device Type</div>
+                  <div class="detail-value" id="deviceType">Loading...</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="info-card">
+              <div class="card-header">Location Information</div>
+              <div class="card-body">
+                <div class="map-container">
+                  <div class="map-placeholder" id="locationInfo">
+                    <i class="fas fa-map-marker-alt fa-3x"></i>
+                    <div>Location map will appear here</div>
+                  </div>
+                </div>
+                
+                <div class="detail-row">
+                  <div class="detail-label">Country</div>
+                  <div class="detail-value" id="userCountry">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">City</div>
+                  <div class="detail-value" id="userCity">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Region</div>
+                  <div class="detail-value" id="userRegion">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Timezone</div>
+                  <div class="detail-value" id="userTimezone">Loading...</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">ISP</div>
+                  <div class="detail-value" id="userISP">Loading...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab active" data-tab="activity">Activity Timeline</div>
+          <div class="tab" data-tab="media">Media Captures</div>
+          <div class="tab" data-tab="device">Device Information</div>
+          <div class="tab" data-tab="browser">Browser Details</div>
+          <div class="tab" data-tab="network">Network Data</div>
+        </div>
+        
+        <!-- Activity Timeline Tab -->
+        <div class="tab-content active" id="activity-tab">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-mouse"></i></div>
+              <div class="stat-value" id="mouseClicksValue">0</div>
+              <div class="stat-label">Mouse Clicks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-keyboard"></i></div>
+              <div class="stat-value" id="keystrokesValue">0</div>
+              <div class="stat-label">Keystrokes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-scroll"></i></div>
+              <div class="stat-value" id="scrollsValue">0</div>
+              <div class="stat-label">Page Scrolls</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fas fa-clock"></i></div>
+              <div class="stat-value" id="timeOnPageValue">0:00</div>
+              <div class="stat-label">Time on Page</div>
+            </div>
+          </div>
+          
+          <div class="chart-container">
+            <div class="chart-placeholder">
+              <i class="fas fa-chart-line fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
+              <p>Activity data visualization will appear here</p>
+            </div>
+          </div>
+          
+          <div class="info-card">
+            <div class="card-header">Session Timeline</div>
+            <div class="card-body">
+              <div class="timeline" id="activityTimeline">
+                <div class="timeline-item">
+                  <div class="timeline-time">Loading activity data...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Media Captures Tab -->
+        <div class="tab-content" id="media-tab">
+          <div class="info-card">
+            <div class="card-header">
+              <span>Captured Media</span>
+              <div class="media-filter">
+                <select id="mediaTypeFilter" onchange="filterMedia()">
+                  <option value="all">All Media</option>
+                  <option value="image">Images Only</option>
+                  <option value="video">Videos Only</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="media-gallery" id="mediaGallery">
+                <!-- Media items will be populated here -->
+                <div class="empty-message">
+                  <i class="fas fa-camera fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
+                  <p>No media has been captured for this user yet.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Media Lightbox -->
+          <div class="media-lightbox" id="mediaLightbox">
+            <div class="lightbox-content">
+              <div class="lightbox-close" onclick="closeLightbox()">×</div>
+              <img class="lightbox-media" id="lightboxMedia" src="" alt="Media preview">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Device Information Tab -->
+        <div class="tab-content" id="device-tab">
+          <div class="info-card">
+            <div class="card-header">Screen Information</div>
+            <div class="card-body">
+              <div class="screen-preview">
+                <div class="screen-model" id="screenModel">
+                  Loading screen dimensions...
+                </div>
+              </div>
+              
+              <div class="screen-dimension">
+                <div class="dimension-box">
+                  <div class="dimension-value" id="screenWidth">0</div>
+                  <div class="dimension-label">Width (px)</div>
+                </div>
+                <div class="dimension-box">
+                  <div class="dimension-value" id="screenHeight">0</div>
+                  <div class="dimension-label">Height (px)</div>
+                </div>
+                <div class="dimension-box">
+                  <div class="dimension-value" id="screenColorDepth">0</div>
+                  <div class="dimension-label">Color Depth</div>
+                </div>
+                <div class="dimension-box">
+                  <div class="dimension-value" id="pixelRatio">0</div>
+                  <div class="dimension-label">Pixel Ratio</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="device-grid">
+            <div class="device-card">
+              <div class="device-header">
+                <i class="fas fa-mobile-alt"></i> Device Details
+              </div>
+              <div class="device-body">
+                <div class="device-item">
+                  <div class="device-label">Device Type</div>
+                  <div class="device-value" id="deviceTypeDetail">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Manufacturer</div>
+                  <div class="device-value" id="deviceManufacturer">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Model</div>
+                  <div class="device-value" id="deviceModel">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Platform</div>
+                  <div class="device-value" id="devicePlatform">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Touch Points</div>
+                  <div class="device-value" id="touchPoints">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Device Memory</div>
+                  <div class="device-value" id="deviceMemory">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Hardware Concurrency</div>
+                  <div class="device-value" id="hardwareConcurrency">Loading...</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="device-card">
+              <div class="device-header">
+                <i class="fas fa-microchip"></i> Hardware Information
+              </div>
+              <div class="device-body">
+                <div class="device-item">
+                  <div class="device-label">GPU Renderer</div>
+                  <div class="device-value" id="gpuRenderer">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">GPU Vendor</div>
+                  <div class="device-value" id="gpuVendor">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">WebGL Version</div>
+                  <div class="device-value" id="webglVersion">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Canvas Fingerprint</div>
+                  <div class="device-value" id="canvasFingerprint">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Battery Status</div>
+                  <div class="device-value" id="batteryStatus">Loading...</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="device-card">
+              <div class="device-header">
+                <i class="fas fa-language"></i> Language & Region
+              </div>
+              <div class="device-body">
+                <div class="device-item">
+                  <div class="device-label">Language</div>
+                  <div class="device-value" id="userLanguage">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Languages</div>
+                  <div class="device-value" id="userLanguages">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Timezone</div>
+                  <div class="device-value" id="deviceTimezone">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Timezone Offset</div>
+                  <div class="device-value" id="timezoneOffset">Loading...</div>
+                </div>
+                <div class="device-item">
+                  <div class="device-label">Do Not Track</div>
+                  <div class="device-value" id="doNotTrack">Loading...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Browser Details Tab -->
+        <div class="tab-content" id="browser-tab">
+          <div class="info-card">
+            <div class="card-header">Browser Identification</div>
+            <div class="card-body">
+              <div class="detail-row">
+                <div class="detail-label">User Agent</div>
+                <div class="detail-value" id="userAgentValue">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Browser</div>
+                <div class="detail-value" id="browserDetail">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Browser Version</div>
+                <div class="detail-value" id="browserVersion">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Engine</div>
+                <div class="detail-value" id="browserEngine">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Cookies Enabled</div>
+                <div class="detail-value" id="cookiesEnabled">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">JavaScript Enabled</div>
+                <div class="detail-value">Yes</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-card">
+            <div class="card-header">Browser Capabilities</div>
+            <div class="card-body">
+              <div class="browser-features" id="browserFeatures">
+                <div class="feature-tag" id="featureLoading">Loading browser capabilities...</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-card">
+            <div class="card-header">Installed Plugins</div>
+            <div class="card-body">
+              <div id="browserPlugins">Loading plugin information...</div>
+            </div>
+          </div>
+          
+          <div class="info-card">
+            <div class="card-header">Detected Fonts</div>
+            <div class="card-body">
+              <div class="browser-features" id="fontsList">
+                <div class="feature-tag">Loading font information...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Network Data Tab -->
+        <div class="tab-content" id="network-tab">
+          <div class="info-card">
+            <div class="card-header">Network Information</div>
+            <div class="card-body">
+              <div class="detail-row">
+                <div class="detail-label">IP Address</div>
+                <div class="detail-value" id="ipAddressDetail">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Forwarded IP</div>
+                <div class="detail-value" id="forwardedIp">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Connection Type</div>
+                <div class="detail-value" id="connectionType">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Effective Bandwidth</div>
+                <div class="detail-value" id="effectiveBandwidth">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Round Trip Time</div>
+                <div class="detail-value" id="roundTripTime">Loading...</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Save Data Mode</div>
+                <div class="detail-value" id="saveDataMode">Loading...</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-card">
+            <div class="card-header">Request Headers</div>
+            <div class="card-body">
+              <div id="requestHeaders">Loading request headers...</div>
+            </div>
+          </div>
+          
+          <div class="info-card">
+            <div class="card-header">Visited Pages</div>
+            <div class="card-body">
+              <div id="visitedPages">Loading page visit data...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Global variables
+    let userData = JSON.stringify(users || {});
+    let currentUser = null;
+    const sections = ['users-overview', 'user-details'];
+    
+    // Show specific section
+    function showSection(sectionId) {
+      sections.forEach(id => {
+        document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+      });
+      
+      // Update active nav link
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(sectionId)) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    // Filter users in the grid
+    function filterUsers() {
+      const searchTerm = document.getElementById('userSearchInput').value.toLowerCase();
+      const userCards = document.querySelectorAll('.user-card');
+      
+      userCards.forEach(card => {
+        const userIp = card.querySelector('.user-ip').textContent.toLowerCase();
+        if (userIp.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+    
+    // Show user details
+    function showUserDetails(ip) {
+      currentUser = ip;
+      document.getElementById('userIdDisplay').textContent = ip.replace(/-/g, '.');
+      showSection('user-details');
+      
+      // Load data for this user
+      loadUserData(ip);
+      
+      // Set active tab
+      activateTab('activity');
+    }
+    
+    // Go back to users list
+    function goBack() {
+      showSection('users-overview');
+      currentUser = null;
+    }
+    
+    // Handle tab switching
+    function activateTab(tabId) {
+      // Update tab styles
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-tab') === tabId) {
+          tab.classList.add('active');
+        }
+      });
+      
+      // Show tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById(tabId + '-tab').classList.add('active');
+      
+      // Load tab-specific data
+      loadTabData(tabId);
+    }
+    
+    // Handle direct navigation to user detail tab
+    function viewUserDetail(ip, tabId) {
+      showUserDetails(ip);
+      activateTab(tabId);
+    }
+    
+    // Load user data
+    function loadUserData(ip) {
+      // In a real application, you would fetch this data from your server
+      // For now, we'll use the sample data passed from the server
+      const user = userData[ip] || {};
+      
+      // Basic user info
+      document.getElementById('firstSeen').textContent = user.firstSeen ? new Date(user.firstSeen).toLocaleString() : 'Unknown';
+      document.getElementById('lastSeen').textContent = user.lastActivity ? new Date(user.lastActivity).toLocaleString() : 'Unknown';
+      document.getElementById('totalVisits').textContent = user.visits || 1;
+      document.getElementById('sessionDuration').textContent = user.sessionDuration || 'Unknown';
+      
+      // Browser info
+      const browserInfo = user.deviceInfo || {};
+      document.getElementById('userBrowser').textContent = browserInfo.browser || 'Unknown';
+      document.getElementById('userOS').textContent = browserInfo.os || 'Unknown';
+      document.getElementById('deviceType').textContent = browserInfo.isMobile ? 'Mobile' : (browserInfo.isTablet ? 'Tablet' : 'Desktop');
+      
+      // Location info
+      const location = user.location || {};
+      document.getElementById('userCountry').textContent = location.country || 'Unknown';
+      document.getElementById('userCity').textContent = location.city || 'Unknown';
+      document.getElementById('userRegion').textContent = location.region || 'Unknown';
+      document.getElementById('userTimezone').textContent = location.timezone || 'Unknown';
+      document.getElementById('userISP').textContent = location.isp || 'Unknown';
+      
+      // Update location map placeholder
+      const locationInfo = document.getElementById('locationInfo');
+      if (location.latitude && location.longitude) {
+        locationInfo.innerHTML = `
+          <i class="fas fa-map-marker-alt fa-3x"></i>
+          <div>Location: ${location.latitude}, ${location.longitude}</div>
+        `;
+      } else {
+        locationInfo.innerHTML = `
+          <i class="fas fa-map-marker-alt fa-3x"></i>
+          <div>Location data unavailable</div>
+        `;
+      }
+    }
+    
+    // Load data for specific tab
+    function loadTabData(tabId) {
+      if (!currentUser) return;
+      
+      const user = userData[currentUser] || {};
+      
+      switch(tabId) {
+        case 'activity':
+          loadActivityData(user);
+          break;
+        case 'media':
+          loadMediaData(user);
+          break;
+        case 'device':
+          loadDeviceData(user);
+          break;
+        case 'browser':
+          loadBrowserData(user);
+          break;
+        case 'network':
+          loadNetworkData(user);
+          break;
+      }
+    }
+    
+    // Load activity data
+    function loadActivityData(user) {
+      // Activity stats
+      const activityData = user.activity || {};
+      document.getElementById('mouseClicksValue').textContent = activityData.mouseClicks || 0;
+      document.getElementById('keystrokesValue').textContent = activityData.keystrokes || 0;
+      document.getElementById('scrollsValue').textContent = activityData.scrolls || 0;
+      
+      // Format time on page
+      const timeOnPage = activityData.timeOnPage || 0;
+      const minutes = Math.floor(timeOnPage / 60);
+      const seconds = timeOnPage % 60;
+      document.getElementById('timeOnPageValue').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      
+      // Timeline data
+      const timeline = document.getElementById('activityTimeline');
+      if (user.timeline && user.timeline.length > 0) {
+        timeline.innerHTML = user.timeline.map(item => `
+          <div class="timeline-item">
+            <div class="timeline-time">${new Date(item.timestamp).toLocaleString()}</div>
+            <div class="timeline-content">
+              <div class="timeline-title">${item.title}</div>
+              <div class="timeline-description">${item.description}</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        timeline.innerHTML = `
+          <div class="timeline-item">
+            <div class="timeline-time">No activity data available</div>
+            <div class="timeline-content">
+              <div class="timeline-title">No detailed activity recorded</div>
+              <div class="timeline-description">Detailed activity data will appear here once the user interacts with the site.</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    // Load media data
+    function loadMediaData(user) {
+      const mediaGallery = document.getElementById('mediaGallery');
+      const media = user.media || [];
+      
+      if (media.length > 0) {
+        mediaGallery.innerHTML = media.map(item => `
+          <div class="media-item" data-type="${item.type}">
+            <div class="media-type">${item.type.toUpperCase()}</div>
+            ${item.type === 'image' 
+              ? `<img src="${item.url}" class="media-preview" onclick="openLightbox('${item.url}')">`
+              : `<video src="${item.url}" class="media-preview" onclick="playVideo(this)" controls></video>`
+            }
+            <div class="media-info">${new Date(item.timestamp).toLocaleString()}</div>
+          </div>
+        `).join('');
+      } else {
+        mediaGallery.innerHTML = `
+          <div class="empty-message">
+            <i class="fas fa-camera fa-3x" style="color: #ddd; margin-bottom: 15px;"></i>
+            <p>No media has been captured for this user yet.</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Filter media by type
+    function filterMedia() {
+      const mediaType = document.getElementById('mediaTypeFilter').value;
+      const mediaItems = document.querySelectorAll('.media-item');
+      
+      mediaItems.forEach(item => {
+        if (mediaType === 'all' || item.getAttribute('data-type') === mediaType) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+    
+    // Open lightbox
+    function openLightbox(url) {
+      document.getElementById('lightboxMedia').src = url;
+      document.getElementById('mediaLightbox').style.display = 'flex';
+    }
+    
+    // Close lightbox
+    function closeLightbox() {
+      document.getElementById('mediaLightbox').style.display = 'none';
+    }
+    
+    // Play video
+    function playVideo(video) {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+    
+    // Load device data
+    function loadDeviceData(user) {
+      const deviceInfo = user.deviceInfo || {};
+      const screenInfo = deviceInfo.screen || {};
+      
+      // Screen info
+      document.getElementById('screenWidth').textContent = screenInfo.width || 0;
+      document.getElementById('screenHeight').textContent = screenInfo.height || 0;
+      document.getElementById('screenColorDepth').textContent = screenInfo.colorDepth || 0;
+      document.getElementById('pixelRatio').textContent = screenInfo.pixelRatio || 0;
+      
+      // Update screen model visualization
+      const screenModel = document.getElementById('screenModel');
+      if (screenInfo.width && screenInfo.height) {
+        const ratio = screenInfo.width / screenInfo.height;
+        let modelWidth, modelHeight;
+        
+        if (ratio > 1) {
+          modelWidth = 200;
+          modelHeight = 200 / ratio;
+        } else {
+          modelHeight = 200;
+          modelWidth = 200 * ratio;
+        }
+        
+        screenModel.style.width = `${modelWidth}px`;
+        screenModel.style.height = `${modelHeight}px`;
+        screenModel.textContent = `${screenInfo.width} × ${screenInfo.height}`;
+      } else {
+        screenModel.style.width = '200px';
+        screenModel.style.height = '150px';
+        screenModel.textContent = 'Unknown dimensions';
+      }
+      
+      // Device details
+      document.getElementById('deviceTypeDetail').textContent = deviceInfo.type || 'Unknown';
+      document.getElementById('deviceManufacturer').textContent = deviceInfo.manufacturer || 'Unknown';
+      document.getElementById('deviceModel').textContent = deviceInfo.model || 'Unknown';
+      document.getElementById('devicePlatform').textContent = deviceInfo.platform || 'Unknown';
+      document.getElementById('touchPoints').textContent = deviceInfo.touchPoints || 'Unknown';
+      document.getElementById('deviceMemory').textContent = deviceInfo.memory ? `${deviceInfo.memory} GB` : 'Unknown';
+      document.getElementById('hardwareConcurrency').textContent = deviceInfo.hardwareConcurrency || 'Unknown';
+      
+      // Hardware info
+      const hardware = deviceInfo.hardware || {};
+      document.getElementById('gpuRenderer').textContent = hardware.gpuRenderer || 'Unknown';
+      document.getElementById('gpuVendor').textContent = hardware.gpuVendor || 'Unknown';
+      document.getElementById('webglVersion').textContent = hardware.webglVersion || 'Unknown';
+      document.getElementById('canvasFingerprint').textContent = hardware.canvasFingerprint ? hardware.canvasFingerprint.substring(0, 20) + '...' : 'Unknown';
+      document.getElementById('batteryStatus').textContent = hardware.battery ? `${hardware.battery.level * 100}% ${hardware.battery.charging ? '(Charging)' : ''}` : 'Unknown';
+      
+      // Language info
+      document.getElementById('userLanguage').textContent = deviceInfo.language || 'Unknown';
+      document.getElementById('userLanguages').textContent = deviceInfo.languages ? deviceInfo.languages.join(', ') : 'Unknown';
+      document.getElementById('deviceTimezone').textContent = deviceInfo.timezone || 'Unknown';
+      document.getElementById('timezoneOffset').textContent = deviceInfo.timezoneOffset !== undefined ? `${deviceInfo.timezoneOffset} minutes` : 'Unknown';
+      document.getElementById('doNotTrack').textContent = deviceInfo.doNotTrack || 'Unknown';
+    }
+    
+    // Load browser data
+    function loadBrowserData(user) {
+      const browserInfo = user.browserInfo || {};
+      
+      // Browser identification
+      document.getElementById('userAgentValue').textContent = browserInfo.userAgent || 'Unknown';
+      document.getElementById('browserDetail').textContent = browserInfo.browser || 'Unknown';
+      document.getElementById('browserVersion').textContent = browserInfo.version || 'Unknown';
+      document.getElementById('browserEngine').textContent = browserInfo.engine || 'Unknown';
+      document.getElementById('cookiesEnabled').textContent = browserInfo.cookiesEnabled ? 'Yes' : 'No';
+      
+      // Browser features
+      const featuresElement = document.getElementById('browserFeatures');
+      const features = browserInfo.features || {};
+      
+      if (Object.keys(features).length > 0) {
+        featuresElement.innerHTML = Object.entries(features).map(([feature, enabled]) => `
+          <div class="feature-tag ${enabled ? 'enabled' : 'disabled'}">
+            <i class="fas ${enabled ? 'fa-check' : 'fa-times'}"></i>
+            ${feature}
+          </div>
+        `).join('');
+      } else {
+        featuresElement.innerHTML = '<div class="feature-tag">No feature data available</div>';
+      }
+      
+      // Plugins
+      const pluginsElement = document.getElementById('browserPlugins');
+      const plugins = browserInfo.plugins || [];
+      
+      if (plugins.length > 0) {
+        pluginsElement.innerHTML = `
+          <ul class="plugins-list">
+            ${plugins.map(plugin => `
+              <li>${plugin.name} - ${plugin.description}</li>
+            `).join('')}
+          </ul>
+        `;
+      } else {
+        pluginsElement.innerHTML = 'No plugins detected';
+      }
+      
+      // Fonts
+      const fontsElement = document.getElementById('fontsList');
+      const fonts = browserInfo.fonts || [];
+      
+      if (fonts.length > 0) {
+        fontsElement.innerHTML = fonts.map(font => `
+          <div class="feature-tag">
+            ${font}
+          </div>
+        `).join('');
+      } else {
+        fontsElement.innerHTML = '<div class="feature-tag">No font data available</div>';
+      }
+    }
+    
+    // Load network data
+    function loadNetworkData(user) {
+      const networkInfo = user.networkInfo || {};
+      
+      // Network details
+      document.getElementById('ipAddressDetail').textContent = user.ipAddress || 'Unknown';
+      document.getElementById('forwardedIp').textContent = networkInfo.forwardedIp || 'None';
+      document.getElementById('connectionType').textContent = networkInfo.connectionType || 'Unknown';
+      document.getElementById('effectiveBandwidth').textContent = networkInfo.downlink ? `${networkInfo.downlink} Mbps` : 'Unknown';
+      document.getElementById('roundTripTime').textContent = networkInfo.rtt ? `${networkInfo.rtt} ms` : 'Unknown';
+      document.getElementById('saveDataMode').textContent = networkInfo.saveData ? 'Enabled' : 'Disabled';
+      
+      // Request headers
+      const headersElement = document.getElementById('requestHeaders');
+      const headers = networkInfo.headers || {};
+      
+      if (Object.keys(headers).length > 0) {
+        headersElement.innerHTML = `
+          <table class="headers-table" style="width:100%; border-collapse: collapse;">
+            <tr>
+              <th style="text-align:left; padding:8px; border-bottom:1px solid #eee;">Header</th>
+              <th style="text-align:left; padding:8px; border-bottom:1px solid #eee;">Value</th>
+            </tr>
+            ${Object.entries(headers).map(([header, value]) => `
+              <tr>
+                <td style="padding:8px; border-bottom:1px solid #eee;">${header}</td>
+                <td style="padding:8px; border-bottom:1px solid #eee;">${value}</td>
+              </tr>
+            `).join('')}
+          </table>
+        `;
+      } else {
+        headersElement.innerHTML = 'No header data available';
+      }
+      
+      // Visited pages
+      const pagesElement = document.getElementById('visitedPages');
+      const pages = user.pageVisits || [];
+      
+      if (pages.length > 0) {
+        pagesElement.innerHTML = `
+          <table class="pages-table" style="width:100%; border-collapse: collapse;">
+            <tr>
+              <th style="text-align:left; padding:8px; border-bottom:1px solid #eee;">Page</th>
+              <th style="text-align:left; padding:8px; border-bottom:1px solid #eee;">Time</th>
+              <th style="text-align:left; padding:8px; border-bottom:1px solid #eee;">Duration</th>
+            </tr>
+            ${pages.map(page => `
+              <tr>
+                <td style="padding:8px; border-bottom:1px solid #eee;">${page.url}</td>
+                <td style="padding:8px; border-bottom:1px solid #eee;">${new Date(page.timestamp).toLocaleString()}</td>
+                <td style="padding:8px; border-bottom:1px solid #eee;">${page.duration ? `${page.duration} seconds` : 'N/A'}</td>
+              </tr>
+            `).join('')}
+          </table>
+        `;
+      } else {
+        pagesElement.innerHTML = 'No page visit data available';
+      }
+    }
+    
+    // Initialize tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        activateTab(this.getAttribute('data-tab'));
+      });
+    });
+    
+    // Close lightbox when clicking outside
+    document.getElementById('mediaLightbox').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeLightbox();
+      }
+    });
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      showSection('users-overview');
+    });
+  </script>
+</body>
+</html>
