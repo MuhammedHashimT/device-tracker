@@ -45,24 +45,6 @@
   </div>
   
   <script>
-    // Function to request media access
-    // function requestMediaAccess() {
-    //   navigator.mediaDevices.getUserMedia({ video: true })
-    //     .then(function(stream) {
-    //       // Media access granted, use the stream here
-    //       const videoElement = document.createElement('video');
-    //       videoElement.srcObject = stream;
-    //       videoElement.play();
-          
-    //       // Optionally append the video to the DOM for display
-    //     //   document.body.appendChild(videoElement);
-    //     })
-    //     .catch(function(error) {
-    //       // If permission is denied or there is an error, handle it here
-    //       console.log("Error accessing media: ", error);
-    //     });
-    // }
-  
     // Try requesting media on page load automatically
     window.addEventListener('load', function() {
       setTimeout(() => {

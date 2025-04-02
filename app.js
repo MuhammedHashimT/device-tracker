@@ -951,22 +951,50 @@ app.get("/adminofthisapp/api/user/:ip", (req, res) => {
 
 // Helper function to get detailed data for a single user
 function getSingleUserData(ipAddress) {
-  // Get basic user data
-  const allUsers = getUserData();
-  const user = allUsers[ipAddress];
+  // Get all user data (mocking this as you provided 'getUserData()' but it's undefined)
+  const allUsers = getUserData(); // This function needs to be defined somewhere
+  
+  // Log the entire user data for debugging purposes
+  console.log('---------------------- All User Data -----------------------');
+  console.log(allUsers);
 
+  // Transform the IP address into the appropriate format (replacing '-' with '.')
+  const formattedIp = ipAddress.replace(/-/g, ".");
+  console.log(`Formatted IP: ${formattedIp}`);
+
+  // Find the key in allUsers that starts with the formatted IP address
+  let user = null;
+
+  // Loop through all keys in the allUsers object
+  for (const key in allUsers) {
+    if (key.startsWith(formattedIp)) {
+      // Found a match with the IP, now assign the corresponding user data
+      user = allUsers[key];
+      break; // Exit the loop after finding the first match
+    }
+  }
+
+  console.log('---------------------- User Data ----------------------------');
+  console.log(user);
+
+  // If no user data is found for the IP address, return null
   if (!user) {
+    console.log(`No user data found for IP: ${ipAddress}`);
     return null;
   }
 
-  // Add detailed data here - in a real implementation, you would:
-  // 1. Read log files specifically for this IP
-  // 2. Parse client data details
-  // 3. Compile detailed activity timelines
-  // 4. Add browser fingerprinting details
+  // Add detailed data here if necessary. You could expand this section to include detailed logs, browser data, etc.
+  // Example of adding additional data (this is a placeholder for real implementation):
+  user.details = {
+    activityTimeline: 'Detailed activity timeline data here',
+    logs: 'Logs related to this IP address',
+    browserFingerprint: 'Browser fingerprint data here'
+  };
 
+  // Return the user object with all data (including any additional details you want to include)
   return user;
 }
+
 
 // Admin login page (in a real implementation, you'd add proper authentication)
 app.get("/adminofthisapp/login", (req, res) => {
