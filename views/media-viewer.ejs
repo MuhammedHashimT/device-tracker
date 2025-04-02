@@ -1,75 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Media Viewer | Admin</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
-    h1 { color: #333; }
-    .ip-section { margin-bottom: 30px; background: white; padding: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .ip-header { display: flex; justify-content: space-between; align-items: center; }
-    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-    .media-item { border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
-    .media-item img { width: 100%; height: auto; object-fit: cover; }
-    .media-item video { width: 100%; height: auto; }
-    .media-time { font-size: 12px; color: #666; margin-top: 5px; }
-    .empty-message { text-align: center; padding: 50px; color: #999; }
-    .toggle-btn { 
-      background: #3498db; 
-      border: none; 
-      color: white; 
-      padding: 5px 10px; 
-      border-radius: 4px; 
-      cursor: pointer; 
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .ip-section {
+      margin-bottom: 30px;
+      background: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .ip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .media-item {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .media-item img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .media-item video {
+      width: 100%;
+      height: auto;
+    }
+
+    .media-time {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 50px;
+      color: #999;
+    }
+
+    .toggle-btn {
+      background: #3498db;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
     }
   </style>
 </head>
+
 <body>
   <h1>Captured Media</h1>
-  
-  <% if (Object.keys(mediaData).length === 0) { %>
+
+  <% if (Object.keys(mediaData).length===0) { %>
     <div class="empty-message">
       <p>No media has been captured yet.</p>
     </div>
-  <% } else { %>
-    <% Object.keys(mediaData).forEach(ip => { %>
-      <div class="ip-section" id="ip-<%= ip %>">
-        <div class="ip-header">
-          <h2>IP: <%= mediaData[ip].ipAddress %></h2>
-          <button class="toggle-btn" onclick="toggleMedia('<%= ip %>')">Toggle View</button>
-        </div>
-        
-        <div class="media-container" id="media-<%= ip %>">
-          <p>Media items: <%= mediaData[ip].mediaItems.length %></p>
-          
-          <div class="media-grid">
-            <% mediaData[ip].mediaItems.forEach(item => { %>
-              <div class="media-item">
-                <% if (item.mediaType === 'image') { %>
-                  <img src="/adminofthisapp/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/image/<%= item.fileName %>" alt="Captured image">
-                <% } else if (item.mediaType === 'video') { %>
-                  <video controls>
-                    <source src="/adminofthisapp/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/video/<%= item.fileName %>" type="video/mp4">
-                    Your browser does not support video playback.
-                  </video>
-                <% } %>
-                <div class="media-time">
-                  <%= new Date(item.captureTime).toLocaleString() %>
+    <% } else { %>
+      <% Object.keys(mediaData).forEach(ip=> { %>
+        <div class="ip-section" id="ip-<%= ip %>">
+          <div class="ip-header">
+            <h2>IP: <%= mediaData[ip].ipAddress %>
+            </h2>
+            <button class="toggle-btn" onclick="toggleMedia('<%= ip %>')">Toggle View</button>
+          </div>
+
+          <div class="media-container" id="media-<%= ip %>">
+            <p>Media items: <%= mediaData[ip].mediaItems.length %>
+            </p>
+
+            <div class="media-grid">
+              <% mediaData[ip].mediaItems.forEach(item=> { %>
+                <div class="media-item">
+                  <% if (item.mediaType==='image' ) { %>
+                    <img
+                      src="/adminofthisapp/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/image/<%= item.fileName %>"
+                      alt="Captured image">
+                    <% } else if (item.mediaType==='video' ) { %>
+                      <video controls>
+                        <source
+                          src="/adminofthisapp/media/view/<%= item.dateFolder %>/<%= item.sanitizedIp %>/video/<%= item.fileName %>"
+                          type="video/mp4">
+                        Your browser does not support video playback.
+                      </video>
+                      <% } %>
+                        <div class="media-time">
+                          <%= new Date(item.captureTime).toLocaleString() %>
+                        </div>
                 </div>
-              </div>
-            <% }); %>
+                <% }); %>
+            </div>
           </div>
         </div>
-      </div>
-    <% }); %>
-  <% } %>
-  
-  <script>
-    function toggleMedia(ip) {
-      const mediaContainer = document.getElementById(`media-${ip}`);
-      mediaContainer.style.display = mediaContainer.style.display === 'none' ? 'block' : 'none';
-    }
-  </script>
+        <% }); %>
+          <% } %>
+
+            <script>
+              function toggleMedia(ip) {
+                const mediaContainer = document.getElementById(`media-${ip}`);
+                mediaContainer.style.display = mediaContainer.style.display === 'none' ? 'block' : 'none';
+              }
+            </script>
 </body>
+
 </html>
